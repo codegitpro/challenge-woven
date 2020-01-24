@@ -1,0 +1,62 @@
+<div class="questions-content"> <div> <div class="alert alert-danger ng-hide" ng-show="$ctrl.showIncompleteWarning &amp;&amp; $ctrl.solution.canStillAnswer($ctrl._challenge)" aria-hidden="true"> Please answer the marked questions. </div> <!----><div class="instructions markdown collapsed" markdown="$ctrl._challenge.instructions" ng-if="$ctrl.modes.solve &amp;&amp; !$ctrl._challenge.isQuestionTimed()"><h2>Checking for Compromised Accounts</h2><h3>Overview</h3><p>To help our users keep their personal information secure, we want to let them know if their account has been involved in a security breach on another site since their last login. Even if our application is perfectly secure, people sometimes reuse passwords across multiple sites. We want to guide them toward updating their information in case it's no longer secure.</p>
+    <p>In the starter code provided in CodeSandbox, you'll see the current login flow with a section in <code>login.js</code> that has some hardcoded values for testing purposes.</p>
+    <h3>Tasks</h3><p>Your goal is to get this code working to the point where we can do some internal testing.</p>
+    <p>Here are the remaining technical tasks the team has identified:</p>
+    <ol>
+    <li><p>Look for recent breaches that involve passwords. Limit the breaches in <code>sampleResponse</code> to breaches where:</p>
+    <ul>
+    <li><code>IsSensitive</code> is false, and</li>
+    <li>the <code>DataClasses</code> array contains the value <code>Passwords</code>, and</li>
+    <li><code>AddedDate</code> was after the user's <code>lastLogin</code></li>
+    </ul>
+    </li>
+    <li><p>After the user successfully logs in, when breaches are present, return the breaches and metadata in the following format:</p>
+    <pre><code> {
+       success: true,
+       meta: {
+         suggestPasswordChange: true,
+         breachedAccounts: [{
+           name: &lt;Name&gt;,
+           domain: &lt;Domain&gt;,
+           breachDate: &lt;BreachDate&gt;,
+           addedDate: &lt;AddedDate&gt;
+         }]
+       }
+     }
+    </code></pre></li>
+    <li><p>When you have filtered to the right breaches and returned the right structure, let's swap in real data. We've decided to use the <a href="https://haveibeenpwned.com/api/v3" target="_blank" rel="noopener">HaveIBeenPwned API</a> to enable this feature. <strong>Because the HaveIBeenPwned API requires a user agent and API key to identify clients, we have set up a proxy server at haveibeenpwned.woventeams.com.</strong> (<a href="https://haveibeenpwned.woventeams.com/api/v3/breachedaccount/test@example.com?truncateResponse=false" target="_blank" rel="noopener">Here's an example endpoint.</a>) All API endpoints and documentation are the same other than the domain, we've just made it easier to fetch the data.</p>
+    <p>When the user provides a valid email and password for their account, hit the HaveIBeenPwned <code>breachedaccount</code> API endpoint instead of using the <code>sampleResponse</code> to see if their account has been impacted by any breaches.</p>
+    <p>Remember to use <code>haveibeenpwned.woventeams.com</code> as the domain when retrieving data. If you see a 4xx status code in the API response, double-check your domain. Also be sure to include the <code>truncateResponse</code> parameter in your querystring.</p>
+    </li>
+    </ol>
+    <p>We recommend approaching the steps above in the order they are listed so that you can make maximum progress on the scenario in the time allotted.</p>
+    <h3>Test users</h3><p>You can use the following accounts to test, which are located in <code>src/sample/users.js</code>. Both users currently return 3 hardcoded breaches, but after you hit the API and return the right breaches, "Safe User" should have no breaches, and "Unsafe User" should have some breaches.</p>
+    <h4>User with no breaches ("Safe User")</h4><ul>
+    <li>Email: safe@example.com</li>
+    <li>Password: pw</li>
+    </ul>
+    <h4>User with breaches  ("Unsafe User")</h4><ul>
+    <li>Email: test@example.com</li>
+    <li>Password: pw</li>
+    </ul>
+    <h3>Other notes</h3><h4>No UI changes needed</h4><p>You should not need to modify any user interface code (located in <code>src/components</code>) to successfully complete this scenario.</p>
+    <h4>Rate-limiting</h4><p>The API may limit requests to every 1500 milliseconds. You should not handle this in your code, just something to be aware of if you see HTTP 429 errors when hitting the API.</p>
+    <h4>Error handling</h4><p>Since this is a timeboxed scenario, we only expect light API error handling. The API returns an HTTP 404 error if the user has no known breaches, so this is a common case to handle. If we get any errors while checking for breaches (404, API is down, etc.) when the user logs in, we can just log the user in with the normal success condition with no metadata set.</p>
+    <h4>Testing</h4><p>For testing purposes, there is a box below the login form that shows the result of the last login attempt. If you are comfortable using automated tests, you can also use the tests at <code>src/login.spec.js</code> to guide you if that helps you get to a solution faster. We will not evaluate any changes to the automated tests.</p>
+    <h3>Time guidance</h3><p>Aim to take between 25-35 minutes for this challenge. Set a timer now for 40 minutes to gauge the time you have spent on this challenge.</p>
+    <p>If you have spent 40 or more minutes:</p>
+    <ul>
+    <li><strong>STOP</strong></li>
+    <li>Document where you are at in the <code>notes.md</code> file.</li>
+    <li>Go on to the next challenge. It is independent from any solution you got on this challenge.</li>
+    <li>You can return to any incomplete challenges if you have time left over at the end.</li>
+    </ul>
+    </div><!----> <!----><!----><div ng-repeat="question in $ctrl._challenge.questions track by question.id" ng-if="$ctrl.showQuestion($index)" scroll-here="$ctrl.modes.solve &amp;&amp; $ctrl._challenge.isQuestionTimed()" class="question question-text question-short" id="quiz-challenge-questions-solve-0" style=""> <div class="prompt"> <span class="counter">1.</span> <div markdown="question.prompt" expandable="$ctrl.summarize" max-lines="3" class="markdown collapsed"><ol>
+    <li>Launch the starting code: <a href="https://codesandbox.io/s/xpn9z2qjz" target="_blank" rel="noopener">https://codesandbox.io/s/xpn9z2qjz</a></li>
+    <li>Make the changes indicated by the scenario prompt.<br>
+    Note: Making any changes should automatically create a new URL for your personal sandbox, which you'll need to submit when you're done. If not, ensure Auto Save is enabled ("File" menu &gt; "Auto Save" should be checked).</li>
+    <li>Paste your final CodeSandbox URL in the box below when you're done or reach the time limit.</li>
+    <li>Be sure to save all files when finished ("File" menu &gt; "Save All") if you changed the Auto Save setting.</li>
+    </ol>
+    <p>If you make any interesting tradeoffs or want to capture things you would do differently given more time, please jot them down in the <code>notes.md</code> file we've provided in CodeSandbox.</p>
+    </div> <!----> </div> <!----><div class="answer" ng-init="$questionIndex = $index" compile-template="$ctrl.questionTemplate(question)"><div class="form-group"> <input class="form-control ng-valid ng-valid-required ng-touched ng-not-empty ng-dirty ng-valid-parse" type="text" ng-model="$ctrl.solution.answers[$questionIndex].values[0]" ng-required="$ctrl.highlightErrors" ng-change="$ctrl._onAnswerChange($questionIndex)" ng-readonly="$ctrl.readonly" ng-disabled="$ctrl.disabled || $ctrl.expired" ng-focus="$ctrl.focusOn($questionIndex)" aria-invalid="false" style="" readonly="readonly"> </div> </div> <!----> <!----> <!----><div class="next-question" ng-if="$ctrl.modes.solve"> <!----> <span ng-hide="$ctrl._challenge.isQuestionTimed() || $ctrl.currentQuestionIdx !== $index || $ctrl.nextDisabled()" aria-hidden="false" class="" style=""> Press <span class="shortcut-hint">CTRL + ENTER</span> for Next Question </span> </div><!----> </div><!----><!----> <!----> <!----> <!----><div class="after-quiz-action" ng-if="$ctrl.afterQuizActionLabel &amp;&amp; (!$ctrl._challenge.isQuestionTimed() || $ctrl.completed)"> <button class="btn-sm btn-primary" ng-click="$ctrl.onAfterQuizAction()" type="button" style=""> Review Assessment <span class="after-quiz-action-keystroke shortcut-hint">CTRL + ENTER</span> </button> </div><!----> <!----><div resize-to-fill-leftover="#quiz-challenge-questions-solve-0" resize-to-fill-leftover-offset="110" ng-if="$ctrl.modes.solve &amp;&amp; !$ctrl._challenge.isQuestionTimed()" style="min-height: 510px;"></div><!----> </div> </div>
